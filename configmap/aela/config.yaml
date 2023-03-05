@@ -1,0 +1,40 @@
+apiVersion: v1
+data:
+  config.yaml: "configuration:\n  working_directory: '.ytdl-sub-downloads'\n\npresets:\n
+    \ tv_show:\n    preset:\n    - \"jellyfin_tv_show_by_date\"\n    - \"season_by_year__episode_by_month_day\"
+    # replace with desired season/episode format\n    - \"add_subtitles\"\n    - \"sponsorblock\"\n
+    \   - \"include_info_json\"\n\n    overrides:\n      tv_show_directory: \"/mnt/Aela\"
+    # replace with path to tv show directory\n\n  ####################################################################################################\n\n
+    \ # Preset to only download and keep recent videos\n  only_recent_videos:\n\n
+    \   # Only download videos within the download_range\n    date_range:\n      after:
+    \"today-{download_range}\"\n\n    # Stops fetching metadata if the video is out
+    of range (saves time + bandwidth)\n    ytdl_options:\n      break_on_reject: True\n\n
+    \   # Deletes any videos older than download_range. WARNING: do not use\n    #
+    \"season_by_year__episode_by_download_index\" if you plan to delete older videos\n
+    \   output_options:\n      keep_files_after: \"today-{download_range}\"\n      output_directory:
+    '{tv_show_directory}/{tv_show_name_sanitized}'\n      file_name: '{episode_file_path}.{ext}'\n
+    \     maintain_download_archive: true\n      output_directory: '{tv_show_directory}/{tv_show_name_sanitized}'\n
+    \     thumbnail_name: '{episode_file_path}-thumb.jpg'      \n\n    # Set the duration
+    of download_range, defaults to 2 months\n    overrides:\n      download_range:
+    \"48months\"\n\n  ####################################################################################################\n\n
+    \ # Preset to download subtitles (either by file or embedded)\n  add_subtitles:\n
+    \   subtitles:\n      # Embed subtitles into the video\n      embed_subtitles:
+    True\n      # And/or download them as a file. Uncomment to download as file:\n
+    \     # subtitles_name: \"{episode_file_path}.{lang}.{subtitles_ext}\"\n      #
+    subtitles_type: \"srt\"\n\n      languages: \"en\" # supports list of multiple
+    languages\n      allow_auto_generated_subtitles: True # allow auto subtitles\n\n
+    \ ####################################################################################################\n\n
+    \ # Preset to cut sponsor segments from videos\n  sponsorblock:\n    # If you
+    download using cron, it is wise to add a delay before downloading ad-filled content
+    to\n    # give folks time to submit sponsor segments. Uncomment to wait 2 days
+    before download a video.\n    # date_range:\n    #  before: \"today-2days\"\n\n
+    \   chapters:\n      # Remove all of these sponsorblock categories\n      sponsorblock_categories:\n
+    \     - \"intro\"\n      - \"outro\"\n      - \"selfpromo\"\n      - \"preview\"\n
+    \     - \"interaction\"\n      - \"sponsor\"\n      - \"music_offtopic\"\n      remove_sponsorblock_categories:
+    \"all\"\n      force_key_frames: False\n\n  ####################################################################################################\n\n
+    \ # Preset for the hoarders who want to also save the info.json file\n  include_info_json:\n
+    \   output_options:\n      info_json_name: \"{episode_file_path}.{info_json_ext}\"\n\n"
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: jellyfin
