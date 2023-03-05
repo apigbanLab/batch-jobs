@@ -1,0 +1,21 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ytdl-sub
+  namespace: jellyfin
+spec:
+  containers:
+  - name: ytdl-sub
+    image: ghcr.io/jmbannon/ytdl-sub:latest
+    ports:
+    - containerPort: 80
+    env:
+    - name: PUID
+      value: "1000"
+    - name: PGID
+      value: "1000"
+    - name: TZ
+      value: Asia/Dubai
+    - name: DOCKER_MODS
+      value: linuxserver/mods:universal-cron
