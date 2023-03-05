@@ -27,9 +27,21 @@ spec:
         memory: "500Mi"
         cpu: "500m"
     volumeMounts:
-    - mountPath: /mnt
+    - mountPath: /mnt/
       name: download-target
+    - name: ytdl-config-vol
+      mountPath: config/config.yaml
+      subPath: config.yaml
+    - name: aela-subscriptions
+      mountPath: config/subscriptions.yaml
+      subPath: subscriptions.yaml
   volumes:
   - name: download-target
     persistentVolumeClaim:
       claimName: jellyfin-pvc-data
+  - name: ytdl-config-vol
+    configMap:
+      name: config
+  - name: aela-subscriptions
+    configMap:
+      name: aela-subscriptions
